@@ -1,0 +1,34 @@
+version: '3'
+services:
+  millionaire:
+    container_name: millionaire
+    hostname: millionaire-game
+    build:
+      context: ./millionaire
+    environment:
+      - DJANGO_SETTINGS_MODULE=millionaire.settings
+    networks:
+      - web_nw
+    volumes:
+      - ./millionaire:/millionaire
+    expose:
+      - "8000"
+  nginx:
+    container_name: nginx
+    hostname: nginx
+    build:
+      context: ./nginx
+    depends_on:
+      - millionaire
+    ports:
+      - "80:80"
+    networks:
+      - web_nw
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./millionaire:/millionaire
+    restart: always
+networks:
+  web_nw:
+    driver: bridge
+
