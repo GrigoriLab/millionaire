@@ -37,6 +37,7 @@ class GamePlay(TemplateView):
             request.session['questions_count'] = 0
         elif request.session['questions_count'] > 5:
             request.session['questions_count'] = 0
+
             score = str(request.session['score'])
             request.session['score'] = 0
             request.session['used_questions'] = []
@@ -52,6 +53,8 @@ class GamePlay(TemplateView):
             return redirect('/game/start')
 
         request.session['questions_count'] = 0
+        if not 'score' in request.session:
+            request.session['score'] = 0
         score = request.session['score']
         request.session['score'] = 0
         request.session['used_questions'] = []
